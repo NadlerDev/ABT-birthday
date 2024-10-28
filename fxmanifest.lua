@@ -2,7 +2,7 @@ fx_version 'bodacious'
 games { 'rdr3', 'gta5' }
 
 author 'ABT Resources | https://discord.gg/TAp46jSK5F'
-description 'A birthday system thats give reward when player has birthday.'
+description 'A birthday system that gives a reward when the player has a birthday.'
 version '1.0.0'
 
 client_script 'client/cl_abt.lua'
