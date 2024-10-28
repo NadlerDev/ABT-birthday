@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="/html/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABT Birthday System</title>
+</head>
+
+<body>
+
+    <div style="display: none;" class="InputContainer">
+        <div class="InputHeader">
+            <h1>ABT Birthday</h1>
+            <span>system</span>
+            <div class="line"></div>
+        </div>
+        <div class="InputCenter">
+            <p>Type your <mark>birthday date</mark> and something to say!</p>
+            <input id="restrictedInput" type="text" placeholder="Enter Birthday date.. (dd/mm/yyyy)">
+            <button id="submitButton">SUBMIT AND WAIT</button>
+        </div>
+    </div>
+
+    <div class="ItsHereContainer">
+        <div class="OutSideImages">
+            <img src="/html/img/conffeti.png" alt="">
+            <img style="margin-top: -15vh;" src="/html/img/brithday.png" alt="">
+            <img style="transform: scaleX(-1);" src="/html/img/conffeti.png" alt="">
+        </div>
+        <div class="MainImage">
+            <img src="img/birthday.png" alt="">
+        </div>
+        <div class="ItsHereText">
+            <h1>You Collected <mark id="reward"></mark>, Happy Birthday!</h1>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    document.getElementById("restrictedInput").addEventListener("input", function (event) {
+        this.value = this.value.replace(/[^0-9/.]/g, '');
+    });
+
+    window.addEventListener('message', function (event) {
+        if (event.data.visible) {
+            $(".InputContainer").fadeIn();
+        } else {
+            $(".InputContainer").fadeOut();
+        }
+
+        if (event.data.itstime) {
+            $(".ItsHereContainer").css({ opacity: 1, top: "3vh" });
+            $("#reward").html(`${event.data.reward}`);
+            setTimeout(() => {
+                $(".ItsHereContainer").css({ opacity: 0, top: "-50vh" });
+            }, 8000);
+        } else {
+            $(".ItsHereContainer").css({ opacity: 0, top: "-50vh" });
+        }
+    });
+
+    document.getElementById("submitButton").addEventListener("click", function () {
+        const birthday = document.getElementById("restrictedInput").value;
+        console.log("[DEBUG] Sending birthday:", birthday);
+        $.post('https://abt-birthday/submitBirthday', JSON.stringify({ birthday }));
+    });
+
+    document.onkeyup = function (data) {
+        if (data.key === "Escape") {
+            $.post(`https://abt-birthday/ABTcloseUI`);
+        }
+    };
+</script>
+
+</html>
